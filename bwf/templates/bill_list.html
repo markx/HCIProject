@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Bills{% endblock %}
+
+{% block content %}
+
+{% include 'navbar.html' %}
+
+<h1>Friend: {{ friend.get_full_name }}</h1>
+<table>
+  {% for bill in bills %}
+  <tr>
+    <td>{{  bill.description  }}</td>
+    <td>{{  bill.net_amount  }}</td>
+  </tr>
+  {% endfor %}
+  <tr>
+      <td>Total: </td>
+      <td>{{ total_amount }}</td>
+  </tr>
+</table>
+{% endblock %}
+

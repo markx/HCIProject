@@ -3,7 +3,6 @@ from django.core.urlresolvers import reverse
 
 from django.views.generic import View,TemplateView,ListView
 from django.views.generic.edit import CreateView
-
 from bwf.models import User, Bill, Friend
 
 from django.contrib.auth.decorators import login_required
@@ -95,6 +94,33 @@ class AddFriendView(View):
             
 add_friend = login_required(AddFriendView.as_view())
 
-#class BillListView(ListView):
-    #def get_queryset(self):
+class BillListView(TemplateView):
+    template_name = "bill_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(BillListView, self).get_context_data(**kwargs)
+
+        user = self.request.user
+
+        friend = Friend.objects.get(pk=kwargs['pk'])
+
+        bills = Bill.objects.get_by_friend(user, friend.email).values()
+        total_amount = 0
+        for each in bills:
+            if each['creditor'] == user.email:
+                each['net_amount'] = each['amount']
+            else:
+                each['net_amount'] = -each['amount']
+
+            total_amount += each['net_amount']
+
+        context['friend'] = friend
+        context['bills'] = bills
+        context['total_amount'] = total_amount
+
+        return context
+
+bill_list = login_required(BillListView.as_view())
+
+
 

@@ -105,12 +105,16 @@ class BillManager(models.Manager):
     def owe_them(self, User):
         return self.filter(debtor=User.email)
 
+    def get_by_friend(self, user, friend):
+        me = user.email
+        return self.filter(creditor=me, debtor=friend) | self.filter(creditor=friend, debtor=me)
+
 class Bill(models.Model):
     creditor = models.EmailField();
     debtor = models.EmailField();
     amount = models.FloatField();
     description = models.CharField(max_length=40, blank=True)
-    bill_time = models.DateTimeField()
+    bill_time = models.DateField()
     created_time = models.DateTimeField(default=timezone.now)
     
     objects = BillManager()
