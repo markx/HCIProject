@@ -1,26 +1,44 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block content %}
-
+<link href="{% static 'css/home.css' %}" rel="stylesheet" >
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
+<!-- <p>Your username and password didn't match. Please try again.</p> -->
 {% endif %}
+<!DOCTYPE html>
+<body>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Bills with Friends</a>
+			</div>
+		</div>
+	</nav>
 
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+	<div class="container">
+		<div class="loginPanel">
+			<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+				{% csrf_token %}
+				<div class="form-group">
+					<table>
+						<tr>
+							<td>{{ form.username.label_tag }}</td>
+							<td>{{ form.username }}</td>
+						</tr>
+						<tr>
+							<td>{{ form.password.label_tag }}</td>
+							<td>{{ form.password }}</td>
+						</tr>
+					</table>
+					<br><br><br>
+					<input type="submit" value="login" class="btn btn-default"/>
+					<input type="hidden" name="next" value="{{ next }}" />
+				</div>
+			</form>
+		</div>
+	</div>
 
-<input type="submit" value="login" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
 
+	{% include 'footer.html' %}
+</body>
 {% endblock %}

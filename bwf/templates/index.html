@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% load staticfiles %}
 
@@ -14,8 +13,15 @@
 	</div>
 
 	<div id="bwf-head-container">
-		<button id="signin" type="button" class="bbtn" href="#">Sign In</button>
-		<button id="signup" type="button" class="bbtn" href="#">Sign Up</button>
+		<form method="post" action = "/login" role = "form">
+			{% csrf_token %}
+			<button type="submit" class="bbtn" id="signin" value="login">Sign In</button>
+		</form>
+
+		<form method="post" action = "/signup" role = "form">
+			{% csrf_token %}
+			<button id="signup" type="submit" class="bbtn" value="signup" >Sign Up</button>
+		</form>
 	</div>
 
 
@@ -34,25 +40,7 @@
 		<hr>
 	</div>
 
-	<div class="footer">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-3">
-					<h4>About us</h4>
-				</div>
-				<div class="col-md-3">
-					<h4>Copyright</h4>
-				</div>
-				<div class="col-md-3">
-					<h4>Help</h4>
-				</div>
-				<div class="col-md-3">
-					<h4>Call 911</h4>
-				</div>
-			</div>
-			<p>Bills with friends is a website for spliting bills with your friends. But if your name is Bill, it doesn't mean that our website could teach to how to make good friends. To make friends, you have to make so much effort. We belive that, annoying people should die alone.</p>
-		</div>
-	</div>
+{% include 'footer.html' %}
 </body>
 {% endblock %}
 

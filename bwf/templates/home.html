@@ -1,64 +1,54 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
-  {% include 'navbar.html' %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet" >
+{% include 'navbar.html' %}
 
-  	<div class = "container bs-docs-container">
-  		<div class = "row">
-		  		<div id="left-sidebar" class = "col-lg-3 col-md-3">
-				        <!-- Sidebar -->
-				        <div id="sidebar-wrapper">
-				            <ul class="sidebar-nav">
-				                <li><a href="#">Dashboard</a></li>
-				                <li><a href="#">Recent Activity</a></li>
-				                <li><a href="#">All Expenses</a></li>
-				            </ul>
-				        </div>
-				        <!-- /#sidebar-wrapper -->
-		  		</div>
+<div class = "container" id="homeContainer">
+	<div class = "row">
+		<div id="left-sidebar" class = "col-lg-3 col-md-3">
+			<!-- Sidebar -->
+			<div id="sidebar-wrapper">
+				<ul class="sidebar-nav">
+					<li><a href="#">Dashboard</a></li>
+					<li><a href="#">Recent Activity</a></li>
+					<li><a href="#">All Expenses</a></li>
+				</ul>
+			</div>
+			<!-- /#sidebar-wrapper -->
+		</div>
 
-		  		<div class = "col-lg-6 col-md-6">
-		  			  <h1>Welcome, {{ user.get_full_name }} </h1>
+		<div class = "col-lg-6 col-md-6">
+			<h1>Welcome, {{ user.get_full_name }} </h1>
 
-				</div>
+		</div>
 
-				<div id = "right-sidebar" class = "col-lg-2 col-md-2">
-					plan to put friend list here.<br><br><br>
-					O'er better waves to speed her rapid course
-					The light bark of my genius lifts the sail,
-					Well pleas'd to leave so cruel sea behind;
-					And of that second region will I sing,
-					In which the human spirit from sinful blot
-					Is purg'd, and for ascent to Heaven prepares.
+		<div id = "right-sidebar" class = "col-lg-2 col-md-2">
+			plan to put friend list here.<br><br><br>
 
-					Here, O ye hallow'd Nine! for in your train
-					I follow, here the deadened strain revive;
-					Nor let Calliope refuse to sound
-					A somewhat higher song, of that loud tone,
-					Which when the wretched birds of chattering note
-					Had heard, they of forgiveness lost all hope.
+			<br>Noah	<br>Sophia
+			<br>Liam	<br>Emma
+			<br>Jacob	<br>Olivia
+			<br>Mason	<br>Isabella
+			<br>William	<br>Ava
+			<br>Ethan	<br>Mia
+			<br>Michael	<br>Emily
+			<br>Alexander<br>Abigail
+			<br>Jayden	<br>Madison
+			<br>Daniel	<br>Elizabeth
+			
+			<div id="friend-list">
+				{% for friend in friends %}
+				<div>{{ friend }}</div>
+				{% endfor %}
+			</div>
 
-					Sweet hue of eastern sapphire, that was spread
-					O'er the serene aspect of the pure air,
-					High up as the first circle, to mine eyes
-					Unwonted joy renew'd, soon as I 'scap'd
-					Forth from the atmosphere of deadly gloom,
-					That had mine eyes and bosom fill'd with grief.
-					The radiant planet, that to love invites,
-					Made all the orient laugh, and veil'd beneath
-					The Pisces' light, that in his escort came.
-					
-					<div id="friend-list">
-					    {% for friend in friends %}
-					    <div>{{ friend }}</div>
-					    {% endfor %}
-					</div>
-
-				</div>
-		</div><!-- end of row -->
-	</div> <!-- end of container -->
+		</div>
+	</div><!-- end of row -->
+</div> <!-- end of container -->
 
 
 

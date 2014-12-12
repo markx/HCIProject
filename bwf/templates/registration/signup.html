@@ -1,18 +1,41 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block content %}
-<form action="" method="post">
-{% csrf_token %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet" >
+<!DOCTYPE html>
+<body>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Bills with Friends</a>
+			</div>
+		</div>
+	</nav>
 
-{% for obj in form %}
-  <div class="fieldWrapper">
-    {{ obj.label_tag }}
-    {{ obj }}
-    <span class="error">
-      {{ obj.errors.as_text }}
-    </span>
-  </div>
-  {% endfor %}
-  <input type="submit"  value="Signup" />
-</form>
+	<div class="container">
+		<div class="loginPanel">
+
+			<form action="" method="post">
+				{% csrf_token %}
+
+				{% for obj in form %}
+				<div class="fieldWrapper">
+					{{ obj.label_tag }}
+					{{ obj }}
+					<span class="error">
+						{{ obj.errors.as_text }}
+					</span>
+				</div>
+				{% endfor %}
+				<br><br><br>
+				<input type="submit"  value="Signup" class="btn btn-default"/>
+			</form>
+
+		</div>
+	</div>
+
+
+	{% include 'footer.html' %}
+</body>
+
 {% endblock %}
