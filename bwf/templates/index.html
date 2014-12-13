@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% load staticfiles %}
 
@@ -12,7 +13,7 @@
 
 	</div>
 
-	<div id="bwf-head-container">
+		<div id="bwf-head-container">
 		<form method="post" action = "/login" role = "form">
 			{% csrf_token %}
 			<button type="submit" class="bbtn" id="signin" value="login">Sign In</button>
@@ -22,25 +23,48 @@
 			{% csrf_token %}
 			<button id="signup" type="submit" class="bbtn" value="signup" >Sign Up</button>
 		</form>
+		
 	</div>
 
 
 
 	<div class="container">
-		<h1>Why choose Bills with friends?</h1>
-		<h3>Even it is such simple such similar with other website.</h3>
+		<h1>Why Bills with friends?</h1>
+		<h3>Bills with friends is a simple tool to track debts and manage shared bills amongst friends. Signing up is free!</h3>
 		<br>
-		<h1>Now I can't come up with a reason.</h1>
-		<h3>Perhaps one day the small website will become one of the biggest company in the world and then you will regret for not buying our stocks. Oh I told you.</h3>
-		<h3>Suddently I got it. I can tell a little story here to make the website looks longer. Oh Liz, how smart you are!</h3>
+		<h1>The story behind this project</h1>
+		<h3>We group of 4 Graduate Students. It was Human Computer Interaction course. The professor asked us to </h3>
+		<h3>implement an application with our own idea. We came up with an idea of building a mobile/ Web        </h3>
+		<h3>application to organize the bills with our friends. Consider there are 4 friend stays together. They </h3>
+		<h3>go to movies, restaurants buys groceries and even takes trips together. They want to track how much  </h3>
+		<h3>each spends, so that the other guys owes him back. There are few apps in market.But they are not very</h3>
+		<h3>good. I want to make a improved version with many visualizations. With this app, we can store small  </h3>
+		<h3>description of the bill (which includes event name, location, date and time), split the bill among 4 </h3>
+		<h3>and gives a graphical representation of records in the form of chart, graph, etc.					 </h3>
 		<br>
-		<h1>Here is a story: The Boy Who Cried Wolf</h1>
-		<h3>A shepherd-boy, who watched a flock of sheep near a village, brought out the villagers three or four times by crying out, "Wolf! Wolf!" and when his neighbors came to help him, laughed at them for their pains.<br>The Wolf, however, did truly come at last. The Shepherd-boy, now really alarmed, shouted in an agony of terror: "Pray, do come and help me; the Wolf is killing the sheep"; but no one paid any heed to his cries, nor rendered any assistance. The Wolf, having no cause of fear, at his leisure lacerated or destroyed the whole flock.<br>There is no believing a liar, even when he speaks the truth.</h3>
 		<br><br>
 		<hr>
 	</div>
 
-{% include 'footer.html' %}
+	<div class="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<h4>About us</h4>
+				</div>
+				<div class="col-md-3">
+					<h4>Copyright</h4>
+				</div>
+				<div class="col-md-3">
+					<h4>Help</h4>
+				</div>
+				<div class="col-md-3">
+					<h4>Call 911</h4>
+				</div>
+			</div>
+			<p>Bills with friends is a website for spliting bills with your friends. But if your name is Bill, it doesn't mean that our website could teach to how to make good friends. To make friends, you have to make so much effort. We belive that, annoying people should die alone.</p>
+		</div>
+	</div>
 </body>
 {% endblock %}
 
