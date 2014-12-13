@@ -4,6 +4,7 @@ from django.core import validators
 from django.utils import timezone
 
 from django.db import models
+from django.db.models import Sum
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin, BaseUserManager
 
 
@@ -100,10 +101,10 @@ class Friend(models.Model):
 
 class BillManager(models.Manager):
     def owe_me(self, User):
-        return self.filter(creditor=User.email)
+        return self.filter(creditor=User.email).values('debtor').annotate(total_amount=Sum('amount'))
 
     def owe_them(self, User):
-        return self.filter(debtor=User.email)
+        return self.filter(debtor=User.email).values('creditor').annotate(total_amount=Sum('amount'))
 
     def get_by_friend(self, user, friend):
         me = user.email

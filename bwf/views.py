@@ -8,7 +8,9 @@ from bwf.models import User, Bill, Friend
 from django.contrib.auth.decorators import login_required
 from bwf.forms import UserCreationForm, AddBillForm
 
+
 import json
+from django.core import serializers
 import logging
 
 logger = logging.getLogger(__name__)
@@ -29,8 +31,22 @@ class HomeView(TemplateView):
         user = self.request.user
         context = super(HomeView, self).get_context_data(**kwargs)
         context['friends'] = user.friend_set.all()
-        context['owe_me'] = Bill.objects.owe_me(user)
-        context['owe_them'] = Bill.objects.owe_me(user)
+
+        owe_me = list(Bill.objects.owe_me(user))
+        #insert friend name
+        for each in owe_me:
+            friend = Friend.objects.get(email=each['debtor'], friendof=user)
+            each['friend_name'] = friend.get_full_name()
+            each['friend_pk'] = friend.pk
+        context['owe_me'] = json.dumps(owe_me)
+
+        owe_them =  list(Bill.objects.owe_them(user)) 
+        for each in owe_them:
+            friend = Friend.objects.get(email=each['creditor'], friendof=user)
+            each['friend_name'] = friend.get_full_name()
+            each['friend_pk'] = friend.pk
+        context['owe_them'] = json.dumps(owe_them) 
+
         return context
 
 home = login_required(HomeView.as_view())
