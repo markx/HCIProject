@@ -1,34 +1,29 @@
 <script>
   	  var friendlist = new Array();
+  	  var i = 0;
+  	  var level = 0;
+  	  var strInput = "hemizedPrice" + i;
+  	  var strInitSample = "sample" + i;
+  	  var testNumber = 3;
+  	  {% for friend in friends %}
+  	  	var stringName = "{{friend.get_full_name}}" + i;
+  	  	$("#addRow tr:eq(0) td:eq("+testNumber+") input").attr({id:stringName});
+  	  	testNumber += 1;
+	  {% endfor %}
+
   	  $("#fadeBill").click(function(){
-	  	  	{% for firend in friends %}
-	  	  		var friendname = "test";
-	  	  		friendlist.push(friendname);
-	  	  		alert(friendlist);
-	  	  	{% endfor %}
-	  	  	document.getElementById('datePicker').valueAsDate = new Date();
-
-  	  });
-
-	  $("#peopleInvolved").click(function(){
-		  $( ".friendsName" ).each(function() {
-		  	for (var i = friendlist.length - 1; i >= 0; i--) {
-
+  	  		if (friendlist.length == 0) {
+		  	  	{% for friend in friends %}
+		  	  		var friendname = "{{ friend.get_full_name }}";
+		  	  		friendlist.push(friendname);
+		  	  	{% endfor %}
 		  	};
-		  });
-	  });
-
-	  $(".friendsName").click(function(){
-	  	if (true) {};
-	  	alert(friendlist);
-	  })
+	  	  	document.getElementById('datePicker').valueAsDate = new Date();
+  	  });
 
 	  $("#equalAmount").on("input",function(){
 	  	var totalAmount = document.getElementById('equalAmount').value;
 	  	var friendsNumber = {{friends|length}};
-	  	// {% for firend in friends %}
-	  	// 	friendsNumber += 1;
-  	 	// {% endfor %}
   	  	$(".perAmountEqual").each(function(){
   	  		this.value = totalAmount/2 + '$';
   	  	});
@@ -46,14 +41,156 @@
 	  	$("#size").attr("class", "modal-dialog modal-sm"); 
 	  });
 
-	  $(".addRow").on("input",function(){
-	  	if (this.value != "") {
+	  $.custom = {
+	  	recursive:function(intI){
+	  		$("#addRow tr:eq("+intI+") td:eq(2) input").unbind("input");
+	  		$("#addRow tr:eq("+intI+") td:eq(2) input").on("input", function(){
+	  			$.updateData(intI);
+	  			$.updateTotal();
+	  		});
+				var strSample = "sample" + intI;
+			  	intI += 1;
+			  	strInput = "hemizedPrice" + intI;
+			  	newSample = "sample" + intI;
+			  	$("#"+strSample).clone().attr({id:newSample}).appendTo("#addRow");
+			  	$("#addRow tr:eq("+intI+") td:eq(2) input").attr({id:strInput});
+			  	document.getElementById(strInput).value = "";
+			  	var countNumber = 3;
+			  	var strCheckBox = "checkBox";
+			  	{% for friend in friends %}
+			  		strCheckBox = "{{friend.get_full_name}}" + intI;
+			  		$("#addRow tr:eq("+intI+") td:eq("+countNumber+") input").attr({id:strCheckBox});
+			  		$("#addRow tr:eq("+intI+") td:eq("+countNumber+") input").attr("row", intI);
+			  		countNumber += 1;
+			  	{% endfor %}
+
+			  	$("#addRow tr:eq("+intI+") td:eq(2) input").bind("input",function(){
+			  		$.custom.recursive(intI);
+			  	});
+			  	level += 1;
+			  	$.updateData(intI);
+	  			$.updateTotal();
+	  			$.recursiveCheckBox(intI);
+	  	}
+	  }
+
+	$.extend({
+		recursiveCheckBox:function(rowNumber){
+			{% for friend in friends %}
+				var checkBoxId = "{{friend.get_full_name}}" + rowNumber;
+				$("#" + checkBoxId).on("click",function(){
+					var valueString = "hemizedPrice" + rowNumber;
+	  				var itemPrice = document.getElementById(valueString).value;
+	  				var thisId = $(this).attr("id");
+	  				var checkBoxValue =  document.getElementById(thisId).value;
+	  				if (checkBoxValue == 0 ) {
+	  					document.getElementById(thisId).value = 1;
+	  				}else{
+	  					document.getElementById(thisId).value = 0;
+	  				};
+	  				$.updateData(rowNumber);
+	  				$.updateTotal();
+				});
+			{% endfor %}
+		}
+	});
+
+	$.extend({
+	  	updateData:function(rowN){
+	  		var priceId = "hemizedPrice" + rowN;
+	  		var sharedNumber = 0;
+	  		{% for friend in friends %}
+	  			var friendName = "{{friend.get_full_name}}";
+		  		var checkBoxId = friendName + rowN;
+		  		var checkValue = $("#"+checkBoxId).attr("value");
+		  		if (checkValue != 0) {
+		  			sharedNumber += 1;
+		  		};
+	  		{% endfor %}
+	  		var itemPrice = document.getElementById(priceId).value;
+	  		var perAmount = itemPrice/sharedNumber;
+	  		{% for friend in friends %}
+	  			var friendName = "{{friend.get_full_name}}";
+	  			var checkBoxId = friendName + rowN;
+		  		var checkValue = $("#"+checkBoxId).attr("value");
+		  		if (checkValue != 0) {
+		  			$("#"+checkBoxId).attr("value", perAmount);
+		  		};
+	  		{% endfor %}
+	  	}
+	});
+
+	$.extend({
+	  	updateTotal:function(){
+	  		document.getElementById("totalAmount").value = "";
+	  		var totalAmountNum = 0;
+	  		for (var n = level - 1; n >= 0; n--) {
+	  			var priceId = "hemizedPrice" + n;
+	  			var priceIdString = document.getElementById(priceId).value;
+	  			var priceIdNum = Number(priceIdString);
+	  			totalAmountNum += priceIdNum;
+	  		};
+	  		document.getElementById("totalAmount").value = totalAmountNum + "";
+
+	  		{% for friend in friends %}
+	  			var friendName = "{{friend.get_full_name}}";
+	  			var subtotalId = friendName + "_Amount";
+
+	  			document.getElementById(subtotalId).value = "";
+	  			for (var n = level - 1; n >= 0; n--) {
+	  				var checkBoxId = friendName + n;
+	  				var checkValue = $("#"+checkBoxId).attr("value");
+	  				if (checkValue != 0) {
+	  					var subtotalIdString =  document.getElementById(subtotalId).value;
+	  					if (subtotalIdString == "") {
+	  						var checkValueNum = Number(checkValue);
+	  						var sumNum = checkValueNum;
+	  					}else{
+	  						var subtotalIdNum = Number(subtotalIdString);
+	  						var checkValueNum = Number(checkValue);
+	  						var sumNum = subtotalIdNum + checkValueNum;
+	  					};
+	  					var sumString = sumNum + "";
+		  				document.getElementById(subtotalId).value = sumNum;
+		  			};
+	  			};
+	  		{% endfor %}
+	  	}
+	});
+
+	$.extend({
+		stringSum:function(string1, string2){
+			var number1 = Number(string1);
+			var number2 = Number(string2);
+			var sumNum =  number1 + number2;
+			var sumString = sumNum + "";
+			return sumString;
+		}
+	});
+
+	  $(".checkBox").click(function(){
+	  	var rowNumber = $(this).attr("row");
+	  	var valueString = "hemizedPrice" + rowNumber;
+	  	var checkBoxString = $(this).attr("id");
+	  	var totalAmount = document.getElementById(valueString).value;
+	  	if (this.value == 0) {
+	  		this.value = 1;
+	  	} else{
+	  		this.value = 0;
 	  	};
+	  	$.updateData(rowNumber);
+	  	$.updateTotal();
+	  });	
+
+	  $("#addRow tr:eq(0) td:eq(2) input").bind("input", function(){
+	  	$.custom.recursive(i);
+	  	var rowNumber = 0;
+	  	$.updateData(rowNumber);
+	  	$.updateTotal();
 	  });
 
 	  $("#cancel").click(function(){
 	  	document.getElementById('peopleInvolved').value = "";
 	  	document.getElementById('peoplePaid').value = "";
-	  	alert("cancel the bill?");
 	  });
   </script>

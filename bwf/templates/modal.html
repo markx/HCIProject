@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-default btn-lg navbar-btn" data-toggle="modal" data-target=".bs-example-modal-sm" id="fadeBill">
+<button type="button" class="btn btn-info navbar-right" data-toggle="modal" data-target=".bs-example-modal-sm" id="fadeBill">
   Add Bill
 </button>
 
@@ -15,31 +15,27 @@
         <ul class="nav nav-pills" role="tablist">
           <li role="presentation" style="position:relative; display:block; padding:5px;">Select who involved</li>
           <li role="presentation" class="dropdown">
-            <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false" style=" ">
+            <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false" style="background:#E9E9E9; padding:5px 10px;">
             <input type="text" class="form-control" placeholder="Username" style="width:100px; display:block-inline;" name="peopleInvolved" id="peopleInvolved">
             <span class="caret"></span>
             </a>
             <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4" id="insertName">
             {% for friend in friends %}
-                <li role="presentation"><a role="menuitem" class="friendsName" tabindex="-1" onclick="document.getElementById('peopleInvolved').value = document.getElementById('peopleInvolved').value + ', ' + '{{ friend.get_full_name }}'">{{ friend.get_full_name }}</a></li>
+                <li role="presentation"><a role="menuitem" class="friendsName" tabindex="-1" onclick="document.getElementById('peopleInvolved').value = document.getElementById('peopleInvolved').value + '{{ friend.get_full_name }}' + ' '">{{ friend.get_full_name }}</a></li>
             {% endfor %}
             </ul>
           </li>
         </ul>
         <!-- 下拉菜单2：选择付款人 -->
-        <ul class="nav nav-pills" role="tablist" style=" ">
-          <li role="presentation" style="position:relative; display:block; padding:5px;">Select who paid&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+        <ul class="nav nav-pills" role="tablist" style="padding:5px;">
+          <li role="presentation" style="position:relative; display:block; padding:5px;">Select who paid</li>
           <li role="presentation" class="dropdown">
-            <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false" style=" ">
+            <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false" style="background:#E9E9E9; padding:5px 10px;">
             <input type="text" class="form-control" placeholder="Username" style="width:100px; display:block-inline;" name="peoplePaid" id="peoplePaid">
             <span class="caret"></span>
             </a>
-            <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
+            <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4" choosetype="peoplepaid">
               <li role="presentation"><a role="menuitem" tabindex="-1" onclick="document.getElementById('peoplePaid').value='Action'">Action</a></li>
-              <li role="presentation"><a role="menuitem" tabindex="-1" onclick="document.getElementById('peoplePaid').value='Another action'">Another action</a></li>
-              <li role="presentation"><a role="menuitem" tabindex="-1" onclick="document.getElementById('peoplePaid').value='Something else here'">Something else here</a></li>
-              <li role="presentation" class="divider"></li>
-              <li role="presentation"><a role="menuitem" tabindex="-1" onclick="document.getElementById('peoplePaid').value='Separated link'">Separated link</a></li>
             </ul>
           </li>
         </ul>
@@ -47,7 +43,7 @@
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active"><a href="#Mannual" role="tab" data-toggle="tab" id="mannual">Mannual</a></li>
           <li role="presentation"><a href="#Equal" role="tab" data-toggle="tab" id="equal">Equal</a></li>
-          <li role="presentation"><a href="#Hemized" role="tab" data-toggle="tab" id="hemized">Itemized</a></li>
+          <li role="presentation"><a href="#Hemized" role="tab" data-toggle="tab" id="hemized">Hemized</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
           <div role="tabpanel" class="tab-pane fade active in" id="Mannual" aria-labelledby="home-tab">
@@ -98,13 +94,31 @@
                       {% endfor %}
                   </tr>
                   </thead>
-                  <tbody id="addRow"> 
-                    <tr data-index="0"><td class="bs-checkbox"></td><td style=""><input type="text" class="addRow"></td><td style=""><input type="text" class="addRow"></td>
-                    {% for friend in friends %}
-                      <td style=""><input data-index="0" name="btSelectItem_{{friend.get_full_name}}" type="radio" value="0"></td>
-                    {% endfor %}
+                  <tbody id="addRow">
+                    <tr data-index="0" id="sample0"><td class="bs-checkbox"></td><td style="test"><input type="text"></td><td style=""><input type="text" id="hemizedPrice0" class="inputGroup"></td>
+                      {% for friend in friends %}
+                        <td style="" id="checkBoxData"><input data-index="0" name="btSelectItem" type="checkbox" value="0" class="checkBox" row="0"></td>
+                      {% endfor %}
                     </tr>
-                    </tbody>
+                  </tbody>
+              </table>
+              <table data-url="data3.json" data-height="299" data-show-columns="true" data-id-field="id">
+                  <thead>
+                  <tr>
+                      <th data-field="state" data-radio="true"></th>
+                      <th data-field="name" data-switchable="false">Total</th>
+                      <th data-field="price">Amount</th>
+                      <th style="width:45;"></th><th style="width:45;"></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                        <td class="bs-checkbox"></td><td style="test"><input type="text" readonly></td><td style=""><input type="text" id="totalAmount" readonly></td>
+                        {% for friend in friends %}
+                          <td><input type="text" style="width:45;" id="{{friend.get_full_name}}_Amount"></td>
+                        {% endfor %}
+                      </tr>
+                  </tbody>
               </table>
             </div>
           </div>
