@@ -6,6 +6,7 @@ from django.views.generic.edit import CreateView
 from bwf.models import User, Bill, Friend
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from bwf.forms import UserCreationForm, AddBillForm
 
 
@@ -23,6 +24,10 @@ class IndexView(TemplateView):
             return redirect('home')
 
         return super(IndexView, self).dispatch(request, *args, **kwargs)
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
 
 class HomeView(TemplateView):
     template_name = "home.html"

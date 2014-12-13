@@ -18,7 +18,7 @@ urlpatterns = patterns('',
 
     url(r'^signup$', SignupView.as_view()  ),
     url(r'^login$', 'django.contrib.auth.views.login' ),
-    url(r'^logout$', 'django.contrib.auth.views.logout' ),
+    url(r'^logout$', logout_view, name='logout'),
 
     url(r'^admin/', include(admin.site.urls)),
 )
