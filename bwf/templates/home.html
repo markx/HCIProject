@@ -3,8 +3,11 @@
 
 {% block title %}Home{% endblock %}
 
-{% block content %}
+{% block head %}
 <link href="{% static 'css/home.css' %}" rel="stylesheet" >
+{% endblock %}
+
+{% block content %}
 {% include 'navbar.html' %}
 
 <div class = "container" id="homeContainer">
@@ -27,22 +30,14 @@
 		</div>
 
 		<div id = "right-sidebar" class = "col-lg-2 col-md-2">
-			plan to put friend list here.<br><br><br>
-
-			<br>Noah	<br>Sophia
-			<br>Liam	<br>Emma
-			<br>Jacob	<br>Olivia
-			<br>Mason	<br>Isabella
-			<br>William	<br>Ava
-			<br>Ethan	<br>Mia
-			<br>Michael	<br>Emily
-			<br>Alexander<br>Abigail
-			<br>Jayden	<br>Madison
-			<br>Daniel	<br>Elizabeth
+      <div>Friend List</div>
+      <br><br><br>
 			
 			<div id="friend-list">
 				{% for friend in friends %}
-				<div>{{ friend }}</div>
+				<div>
+          <a href="{% url 'bill_list' pk=friend.pk %}">{{ friend.get_full_name }}</a>
+        </div>
 				{% endfor %}
 			</div>
 
