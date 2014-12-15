@@ -6,7 +6,7 @@
   	  var friendlist = [{email: '{{ user.email }}', 
 	                first_name: '{{user.first_name}}',
 	                last_name: '{{ user.last_name }}',
-	                name: '{{user.get_full_name }}',
+	                name: '{{user.last_name}}',
 	                id: -1}];
   	  var i = 0;
   	  var level = 0;
@@ -16,6 +16,11 @@
   	  var strInitSample = "sample" + i;
   	  var testNumber = 3;
   	  var chooseFriend = [];
+  	  var peopleInvolved = [];
+
+  	  var resetVar = function(){
+  	  	involvedPeople = [user];
+  	  }
 
 	  function getCookie(name) {
 		    var cookieValue = null;
@@ -55,7 +60,7 @@
 	  	$("#mannual_table").append(txt3);
 	  	var txt4 = $("<td><input type='text' style='width:45;' id='"+friend.name+"_Amount'  readonly></td>");
 	  	$("#hemized_table").append(txt4);
-	  	var stringName = friend.name + i;
+	  	var stringName = friend.name + 0;
 	  	var txt5 = $("<td style=''><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"'></td>")
 	  	$("#sample0").append(txt5);
 	  });	
@@ -63,19 +68,12 @@
 		
   	  $("#fadeBill").click(function(){
 		  	  {% for friend in friends %}
-		  	  	  var friendname = "{{ friend.get_full_name }}";
-	              friendlist.push({ 
-	                email: '{{ friend.email }}', 
-	                first_name: '{{friend.first_name}}',
-	                last_name: '{{ friend.last_name }}',
-	                name: '{{friend.get_full_name }}',
-	                id: {{ friend.pk }}
-	              });
+		  	  	  var friendname = "{{ friend.last_name }}";
 	              chooseFriend.push({ 
 	                email: '{{ friend.email }}', 
 	                first_name: '{{friend.first_name}}',
 	                last_name: '{{ friend.last_name }}',
-	                name: '{{friend.get_full_name }}',
+	                name: '{{friend.last_name}}',
 	                id: {{ friend.pk }}
 	              });
 		  	  {% endfor %}
@@ -98,6 +96,11 @@
   							};
   						});
 					  });
+                    $.each(chooseFriend, function(n, friend){
+                    	if (friend.id == item.id) {
+                    		friendlist.push(friend);
+                    	};
+                    });
                   },
                   onDelete: function (item) {
                     $('#li-'+item.id).remove();
@@ -179,7 +182,6 @@
 				var checkBoxId = friend.name + rowNumber;
 				$("#" + checkBoxId).on("click",function(){
 					var valueString = "hemizedPrice" + rowNumber;
-	  				var itemPrice = document.getElementById(valueString).value;
 	  				var thisId = $(this).attr("id");
 	  				var checkBoxValue =  document.getElementById(thisId).value;
 	  				if (checkBoxValue == 0 ) {
@@ -277,9 +279,25 @@
 		  	$("#mannual_table").append(txt3);
 		  	var txt4 = $("<td id='totalPer_"+friendname+"'><input type='text' style='width:45;' id='"+friendname+"_Amount'  readonly></td>");
 		  	$("#hemized_table").append(txt4);
-		  	var stringName = friendname + i;
-		  	var txt5 = $("<td style='' id='checkBox_"+friendname+"'><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"'></td>")
-		  	$("#sample0").append(txt5);
+		  	for (var lvl = 0; lvl <= level; lvl++) {
+		  		var stringName = friendname + lvl;
+			  	var txt5 = $("<td style='' id='checkBox_"+friendname+"'><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"' lvl='"+lvl+"'></td>")
+			  	$("#sample"+lvl).append(txt5);
+			  	var checkBoxId = stringName;
+			  	$("#" + checkBoxId).on("click",function(){
+			  		var checkBoxlvl = $(this).attr("lvl")	
+					var valueString = "hemizedPrice";
+	  				var thisId = $(this).attr("id");
+	  				var checkBoxValue =  $("#"+thisId).attr("value");
+	  				if (checkBoxValue == 0 ) {
+	  					document.getElementById(thisId).value = 1;
+	  				}else{
+	  					document.getElementById(thisId).value = 0;
+	  				};
+	  				$.updateData(checkBoxlvl);
+	  				$.updateTotal();
+				});
+		  	};
 		}
 	});
 
@@ -293,7 +311,7 @@
 		  	$("#mannual_table"+friendname).remove();
 		  	var txt4 = $("<td id='totalPer_"+friendname+"'><input type='text' style='width:45;' id='"+friendname+"_Amount'  readonly></td>");
 		  	$("#totalPer_"+friendname).remove();
-		  	var stringName = friendname + i;
+		  	var stringName = friendname + level;
 		  	var txt5 = $("<td style='' id='checkBox_"+friendname+"'><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"'></td>")
 		  	$("#checkBox_"+friendname).remove();
 		}
@@ -354,7 +372,7 @@
 	  		});
 	  	};
 
-	  	$.post("/bill/new",{bill: postData},function(){
+	  	$.post("/bill/new",{'bill': JSON.stringify(postData)},function(){
 	  		location.reload();
 	  	});
 
