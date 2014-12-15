@@ -188,3 +188,11 @@
 {
     background-color: d3dde7;
 }
+
+ul.token-input-list-facebook {
+    width: auto !important;
+}
+
+div.token-input-dropdown-facebook {
+    width: auto !important;
+}

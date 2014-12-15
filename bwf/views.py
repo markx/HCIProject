@@ -80,15 +80,16 @@ class AddBillView(View):
         post = request.POST
         new_friends = json.loads(request.POST.get('new_friend','[]'))
         bills = json.loads(request.POST.get('bill','[]'))
+        print(post)
 
         #add new friends if exist
         for data in new_friends:
             try:
                 friend = Friend()
-                friend.email = data.email
-                friend.first_name = data.first_name
-                friend.last_name = data.last_name
-                friend.friendof = request.user
+                friend.email = data['email']
+                friend.first_name = data['first_name']
+                friend.last_name = data['last_name']
+                friend.friendof = request['user']
 
                 friend.save()
             except Exception :
@@ -98,14 +99,18 @@ class AddBillView(View):
         for data in bills:
             try:
                 bill = Bill()
-                bill.creditor = data.creditor
-                bill.debtor = data.debtor
-                bill.amount = data.amount
-                bill.bill_time = data.time
+                print(data)
+                bill.creditor = data['creditor']
+                bill.debtor = data['debtor']
+                bill.amount = data['amount']
+                bill.bill_time = data['bill_time']
 
                 bill.save()
+                print("bill saved!")
             except Exception :
+                print(Exception)
                 logging.exception()
+                
         response_data = {"done": True }
         return HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -125,9 +130,7 @@ class AddFriendView(View):
 
                 friend.save()
 
-                logger.debug("friend saved!")
             except Exception :
-                logger.debug("friend not!")
                 logging.exception()
         return redirect('home')
             
