@@ -110,7 +110,7 @@
   $("#creditor_chen").click(function(){
   	document.getElementById("peoplePaid").value = $(this).text();
   	$.each(friendlist,function(n, friend){
-		if (friend.name == chen) {
+		if (friend.name == 'chen') {
 			creditor = friend.email;
 		};
 	});
@@ -271,7 +271,7 @@
 		addTab:function(friendname){
 		  	var txt1 = $("<th id='price_table"+friendname+"'>"+friendname+"</th>");
 		  	$("#price_table").append(txt1);
-		  	var txt2 = $("<p id='equal_table"+friendname+"'>"+friendname+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friendname+"}'></span></p>");
+		  	var txt2 = $("<p id='equal_table"+friendname+"'>"+friendname+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friendname+"'></span></p>");
 		  	$("#equal_table").append(txt2);
 		  	var txt3 = $("<tr id='mannual_table"+friendname+"'><th>"+friendname+" </th><th><input type='text' id='perAmountMannual_"+friendname+"' class='sharedAmount'></th></tr>")
 		  	$("#mannual_table").append(txt3);
@@ -287,7 +287,7 @@
 		deleteTab:function(friendname){
 		  	var txt1 = $("<th id='price_table"+friendname+"'>"+friendname+"</th>");
 		  	$("#price_table"+friendname).remove();
-		  	var txt2 = $("<p id='equal_table"+friendname+"'>"+friendname+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friendname+"}'></span></p>");
+		  	var txt2 = $("<p id='equal_table"+friendname+"'>"+friendname+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friendname+"'></span></p>");
 		  	$("#equal_table"+friendname).remove();
 		  	var txt3 = $("<tr id='mannual_table"+friendname+"'><th>"+friendname+" </th><th><input type='text' id='perAmountMannual_"+friendname+"' class='sharedAmount'></th></tr>")
 		  	$("#mannual_table"+friendname).remove();
@@ -326,7 +326,7 @@
 	  		$.each(friendlist, function(n, friend){
 	  			if (friend.email != creditor) {
 	  				var tabId = "perAmountMannual_" + friend.name;
-	  				var amount = document.getElementById(tabId).value;
+	  				var amount = $("#"+tabId).val();
 	  				var billTime = $("#datePicker").val();
 	  				var bill = {"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
 	  				postData.push(bill);
@@ -336,7 +336,7 @@
 	  		$.each(friendlist, function(n, friend){
 	  			if (friend.email != creditor) {
 	  				var tabId = "perAmountEqual_" + friend.name;
-	  				var amount = document.getElementById(tabId).value;
+	  				var amount = $("#"+tabId).val();
 	  				var billTime = $("#datePicker").val();
 	  				var bill = {"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
 	  				postData.push(bill);
@@ -346,7 +346,7 @@
 	  		$.each(friendlist, function(n, friend){
 	  			if (friend.email != creditor) {
 	  				var tabId = friend.name + "_Amount";
-	  				var amount = document.getElementById(tabId).value;
+	  				var amount = $("#"+tabId).val();
 	  				var billTime = $("#datePicker").val();
 	  				var bill = {"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
 	  				postData.push(bill);
