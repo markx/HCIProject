@@ -54,11 +54,11 @@
 	  $.each(friendlist, function(n, friend){
 	  	var txt1 = $("<th>"+friend.name+"</th>");
 	  	$("#price_table").append(txt1);
-	  	var txt2 = $("<p>"+friend.name+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friend.name+"}'></span></p>");
+	  	var txt2 = $("<p>"+friend.name+"<span><input type='text' class='form-control' placeholder='Shared Amount'  class='perAmountEqual' id='perAmountEqual_"+friend.name+"}'></span></p>");
 	  	$("#equal_table").append(txt2);
-	  	var txt3 = $("<tr><th>"+friend.name+" </th><th><input type='text' id='perAmountMannual_"+friend.name+"' class='sharedAmount'></th></tr>")
+	  	var txt3 = $("<tr><th>"+friend.name+" </th><th><input type='text' class='form-control' placeholder='Shared Amount' id='perAmountMannual_"+friend.name+"' class='sharedAmount'></th></tr>")
 	  	$("#mannual_table").append(txt3);
-	  	var txt4 = $("<td><input type='text' style='width:45;' id='"+friend.name+"_Amount'  readonly></td>");
+	  	var txt4 = $("<td><input type='text' style='width:80;' class='form-control' placeholder='Peramount' id='"+friend.name+"_Amount'  readonly></td>");
 	  	$("#hemized_table").append(txt4);
 	  	var stringName = friend.name + 0;
 	  	var txt5 = $("<td style=''><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"'></td>")
@@ -80,6 +80,10 @@
 	  	  	document.getElementById('datePicker').valueAsDate = new Date();
   	  });
 
+  $("#total-itemized").on("input", function(){
+	$.updateTotal();
+  });
+
   $(function(){
             $("#peopleInvolved").tokenInput( chooseFriend ,
                 {
@@ -89,7 +93,7 @@
                     $('#menu1').append(li);
                     $.addTab(item.name);
                     $("#creditor_"+item.name).click(function(){
-  						document.getElementById("peoplePaid").value = $(this).text();
+  						$("#drop4_peoplePaid").text($(this).text());
   						$.each(friendlist,function(n, friend){
   							if (friend.name == item.name) {
   								creditor = friend.email;
@@ -104,6 +108,11 @@
                   },
                   onDelete: function (item) {
                     $('#li-'+item.id).remove();
+					$.each(friendlist, function(n, friend){
+						if (item.id == friend.id) {
+							friendlist.splice(n,1);
+						};
+					});
                     $.deleteTab(item.name);
                   } 
                 });
@@ -111,7 +120,7 @@
   });
 
   $("#creditor_chen").click(function(){
-  	document.getElementById("peoplePaid").value = $(this).text();
+  	$("#drop4_peoplePaid").text($(this).text());
   	$.each(friendlist,function(n, friend){
 		if (friend.name == 'chen') {
 			creditor = friend.email;
@@ -232,6 +241,7 @@
 	  			totalAmountNum += priceIdNum;
 	  		};
 	  		document.getElementById("totalAmount").value = totalAmountNum + "";
+	  		$("#remain-amount").val($("#total-itemized").val() - $("#totalAmount").val());
 
 	  		$.each(friendlist, function(n, friend){
 	  			var friendName = friend.name;
@@ -252,7 +262,11 @@
 	  						var sumNum = subtotalIdNum + checkValueNum;
 	  					};
 	  					var sumString = sumNum + "";
-		  				document.getElementById(subtotalId).value = sumNum;
+	  					if ($("#remain-amount").val() >= 0) {
+		  					document.getElementById(subtotalId).value = sumNum + $("#remain-amount").val()/friendlist.length;
+		  				}else {
+		  					document.getElementById(subtotalId).value = sumNum;
+		  				};
 		  			};
 	  			};
 	  		});
@@ -273,15 +287,15 @@
 		addTab:function(friendname){
 		  	var txt1 = $("<th id='price_table"+friendname+"'>"+friendname+"</th>");
 		  	$("#price_table").append(txt1);
-		  	var txt2 = $("<p id='equal_table"+friendname+"'>"+friendname+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friendname+"'></span></p>");
+		  	var txt2 = $("<p id='equal_table"+friendname+"'>"+friendname+"<span><input type='text' class='form-control' placeholder='Shared Amount' class='perAmountEqual' id='perAmountEqual_"+friendname+"'></span></p>");
 		  	$("#equal_table").append(txt2);
-		  	var txt3 = $("<tr id='mannual_table"+friendname+"'><th>"+friendname+" </th><th><input type='text' id='perAmountMannual_"+friendname+"' class='sharedAmount'></th></tr>")
+		  	var txt3 = $("<tr id='mannual_table"+friendname+"'><th>"+friendname+" </th><th><input type='text' class='form-control' placeholder='Shared Amount' id='perAmountMannual_"+friendname+"' class='sharedAmount'></th></tr>")
 		  	$("#mannual_table").append(txt3);
-		  	var txt4 = $("<td id='totalPer_"+friendname+"'><input type='text' style='width:45;' id='"+friendname+"_Amount'  readonly></td>");
+		  	var txt4 = $("<td id='totalPer_"+friendname+"'><input type='text' class='form-control' placeholder='description' style='width:80;' id='"+friendname+"_Amount'  readonly></td>");
 		  	$("#hemized_table").append(txt4);
 		  	for (var lvl = 0; lvl <= level; lvl++) {
 		  		var stringName = friendname + lvl;
-			  	var txt5 = $("<td style='' id='checkBox_"+friendname+"'><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"' lvl='"+lvl+"'></td>")
+			  	var txt5 = $("<td style='' class='checkBox_"+friendname+"'><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"' lvl='"+lvl+"'></td>")
 			  	$("#sample"+lvl).append(txt5);
 			  	var checkBoxId = stringName;
 			  	$("#" + checkBoxId).on("click",function(){
@@ -303,17 +317,16 @@
 
 	$.extend({
 		deleteTab:function(friendname){
-		  	var txt1 = $("<th id='price_table"+friendname+"'>"+friendname+"</th>");
 		  	$("#price_table"+friendname).remove();
-		  	var txt2 = $("<p id='equal_table"+friendname+"'>"+friendname+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friendname+"'></span></p>");
 		  	$("#equal_table"+friendname).remove();
-		  	var txt3 = $("<tr id='mannual_table"+friendname+"'><th>"+friendname+" </th><th><input type='text' id='perAmountMannual_"+friendname+"' class='sharedAmount'></th></tr>")
 		  	$("#mannual_table"+friendname).remove();
-		  	var txt4 = $("<td id='totalPer_"+friendname+"'><input type='text' style='width:45;' id='"+friendname+"_Amount'  readonly></td>");
 		  	$("#totalPer_"+friendname).remove();
+		  	$(".checkBox_"+friendname).remove();
 		  	var stringName = friendname + level;
-		  	var txt5 = $("<td style='' id='checkBox_"+friendname+"'><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"'></td>")
-		  	$("#checkBox_"+friendname).remove();
+		  	for (var lvl = 0; lvl <= level; lvl++) {
+		  		$.updateData(lvl);
+			};
+			$.updateTotal();
 		}
 	});
 
@@ -343,30 +356,32 @@
 	  	if (chooseType == "mannual") {
 	  		$.each(friendlist, function(n, friend){
 	  			if (friend.email != creditor) {
+	  				var description = $("#description").val();
 	  				var tabId = "perAmountMannual_" + friend.name;
 	  				var amount = $("#"+tabId).val();
 	  				var billTime = $("#datePicker").val();
-	  				var bill = {"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
+	  				var bill = {"description":description,"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
 	  				postData.push(bill);
 	  			};
 	  		});
 	  	}else if (chooseType == "equal") {
 	  		$.each(friendlist, function(n, friend){
 	  			if (friend.email != creditor) {
+	  				var description = $("#description").val();
 	  				var tabId = "perAmountEqual_" + friend.name;
 	  				var amount = $("#"+tabId).val();
 	  				var billTime = $("#datePicker").val();
-	  				var bill = {"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
+	  				var bill = {"description":description,"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
 	  				postData.push(bill);
 	  			};
 	  		});
 	  	}else{
 	  		$.each(friendlist, function(n, friend){
-	  			if (friend.email != creditor) {
+	  			if (friend.email != creditor) {var description = $("#description").val();
 	  				var tabId = friend.name + "_Amount";
 	  				var amount = $("#"+tabId).val();
 	  				var billTime = $("#datePicker").val();
-	  				var bill = {"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
+	  				var bill = {"description":description,"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
 	  				postData.push(bill);
 	  			};
 	  		});
@@ -379,7 +394,6 @@
 	  });
 
 	  $("#cancel").click(function(){
-	  	document.getElementById('peopleInvolved').value = "";
-	  	document.getElementById('peoplePaid').value = "";
+	  	location.reload();
 	  });
   </script>

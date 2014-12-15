@@ -104,6 +104,7 @@ class AddBillView(View):
                 bill.debtor = data['debtor']
                 bill.amount = data['amount']
                 bill.bill_time = data['bill_time']
+                bill.description = data['description'];
 
                 bill.save()
                 print("bill saved!")
