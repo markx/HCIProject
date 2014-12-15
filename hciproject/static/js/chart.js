@@ -6,6 +6,11 @@ chart.draw = function (id, data) {
         data = {name:"No Data", y:0, pk:""};
     }
 
+    var title = 'Owe<br>Me';
+    if(id != 'pie-oweme'){
+        title = 'Owe<br>Them'
+    }
+
     $('#'+id ).highcharts({
         chart: {
             plotBackgroundColor: null,
@@ -13,7 +18,7 @@ chart.draw = function (id, data) {
             plotShadow: false
         },
         title: {
-            text: 'Browser<br>shares',
+            text: title,
             align: 'center',
             verticalAlign: 'middle',
             y: 0
@@ -46,7 +51,7 @@ chart.draw = function (id, data) {
         
         series: [{
             type: 'pie',
-            name: 'Browser share',
+            name: 'bill',
             innerSize: '45%',
             data: data
         }]
