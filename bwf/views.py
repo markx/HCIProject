@@ -114,19 +114,22 @@ add_bill = login_required(AddBillView.as_view())
 
 class AddFriendView(View):
     def post(self,request,*args, **kwargs):
-        data = request.POST.get('friend')
-        if data: 
+        post = request.POST
+        if post: 
             try:
                 friend = Friend()
-                friend.email = data.email
-                friend.first_name = data.first_name
-                friend.last_name = data.last_name
+                friend.email = post['email']
+                friend.first_name = post['first_name']
+                friend.last_name = post['last_name']
                 friend.friendof = request.user
 
                 friend.save()
 
+                logger.debug("friend saved!")
             except Exception :
+                logger.debug("friend not!")
                 logging.exception()
+        return redirect('home')
             
 add_friend = login_required(AddFriendView.as_view())
 
