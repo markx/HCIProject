@@ -38,19 +38,29 @@ class HomeView(TemplateView):
         context['friends'] = user.friend_set.all()
 
         owe_me = list(Bill.objects.owe_me(user))
+        data_oweme = []
         #insert friend name
         for each in owe_me:
-            friend = Friend.objects.get(email=each['debtor'], friendof=user)
-            each['friend_name'] = friend.get_full_name()
-            each['friend_pk'] = friend.pk
-        context['owe_me'] = json.dumps(owe_me)
+            try:
+                friend = Friend.objects.get(email=each['debtor'], friendof=user)
+                each['friend_name'] = friend.get_full_name()
+                each['friend_pk'] = friend.pk
+                data_oweme.append(each)
+            except:
+                continue
+        context['owe_me'] = json.dumps(data_oweme)
 
         owe_them =  list(Bill.objects.owe_them(user)) 
+        data_owethem = []
         for each in owe_them:
-            friend = Friend.objects.get(email=each['creditor'], friendof=user)
-            each['friend_name'] = friend.get_full_name()
-            each['friend_pk'] = friend.pk
-        context['owe_them'] = json.dumps(owe_them) 
+            try:
+                friend = Friend.objects.get(email=each['creditor'], friendof=user)
+                each['friend_name'] = friend.get_full_name()
+                each['friend_pk'] = friend.pk
+                data_owethem.append(each)
+            except:
+                continue
+        context['owe_them'] = json.dumps(data_owethem) 
 
         return context
 
