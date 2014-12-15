@@ -10,6 +10,9 @@ urlpatterns = patterns('',
 
     url(r'^$', IndexView.as_view(), name='index'),
     url(r'^home$', home, name='home'),
+    url(r'^help$', help, name='help'),
+
+
     url(r'^bill/new$', add_bill, name='add_bill'),
     url(r'^friend/new$', add_friend, name='add_friend'),
 

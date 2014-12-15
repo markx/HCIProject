@@ -167,3 +167,7 @@ bill_list = login_required(BillListView.as_view())
 
 
 
+class HelpView(TemplateView):
+    template_name = "help.html"
+
+help = HelpView.as_view()

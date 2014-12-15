@@ -2,11 +2,9 @@
 {% load staticfiles %}
 {% block content %}
 <link href="{% static 'css/home.css' %}" rel="stylesheet" >
-{% if form.errors %}
-<!-- <p>Your username and password didn't match. Please try again.</p> -->
-{% endif %}
+
 <!DOCTYPE html>
-<body>
+
 	<nav class="navbar navbar-default" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -30,7 +28,11 @@
 							<td>{{ form.password }}</td>
 						</tr>
 					</table>
-					<br><br><br>
+					<br>
+{% if form.errors %}
+<!-- <p style="color:red;">Your username and password didn't match. Please try again.</p> -->
+{% endif %}
+					<br><br>
 					<input type="submit" value="login" class="btn btn-default"/>
 					<input type="hidden" name="next" value="{{ next }}" />
 				</div>
@@ -40,5 +42,5 @@
 
 
 	{% include 'footer.html' %}
-</body>
+
 {% endblock %}
