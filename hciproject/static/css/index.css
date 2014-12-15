@@ -5,7 +5,7 @@
  	background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center 0px; 
- 	height: 687px;
+ 	height: 468px;
  	border-top: solid 20px #fff;
  	border-bottom: solid 2px #ddd;
 }
@@ -54,30 +54,42 @@
 .container
 {
 	text-align: center;
+	width: 60%;
 
 }
 
 h1
 {
+	font-size: 180%;
 	line-height: 150%;
 	font-family: 'Slabo 27px', serif;
 }
 
 h3
 {
+	font-size: 120%;
 	font-family: 'Lato', sans-serif;
 	line-height: 150%;
 }
 
 h4
 {
+	font-size: 120%;
 	color: #777;
 	font-family: 'PT Sans', sans-serif;
 }
 
 .footer
 {
-	height: 100px;
 	margin-bottom: 0px;
-	background-color: #eee;
+	border-top-width: 1px;
+    padding-top: 10px;
+    height: 45px;
+    background-color: #eee;
+    color: #666;
+    line-height: 60%;
+    font-size: 9pt;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
 }

@@ -4,49 +4,54 @@
 {% block title %}Home{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/home.css' %}" rel="stylesheet" >
+
 {% endblock %}
 
 {% block content %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet" ><!-- Do not put it in header block. Unknow reason -->
 {% include 'navbar.html' %}
 
 <div class = "container" id="homeContainer">
 	<div class = "row">
-		<div id="left-sidebar" class = "col-lg-3 col-md-3">
-			<!-- Sidebar -->
-			<div id="sidebar-wrapper">
-				<ul class="sidebar-nav">
-					<li><a href="#">Dashboard</a></li>
-					<li><a href="#">Recent Activity</a></li>
-					<li><a href="#">All Expenses</a></li>
-				</ul>
+		<div id="left-sidebar" class = "col-lg-2 col-md-2">
+			<div class="wrapper">
+				<!-- Sidebar -->
+				<div id="sidebar-wrapper">
+					<ul class="sidebar-nav">
+						<li><a href="#"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>&nbsp;&nbsp;Dashboard</a></li>
+						<li><a href="#"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;&nbsp;Recent Activity</a></li>
+						<li><a href="#"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;&nbsp;All Expenses</a></li>
+					</ul>
+				</div>
+				<!-- /#sidebar-wrapper -->
 			</div>
-			<!-- /#sidebar-wrapper -->
 		</div>
 
-		<div class = "col-lg-6 col-md-6">
+		<div class = "col-lg-8 col-md-8" id="dashboard">
 			<h1>Welcome, {{ user.get_full_name }} </h1>
-      {% include 'chart.html' %}
+			{% include 'chart.html' %}
 
 		</div>
 
 
 		<div id = "right-sidebar" class = "col-lg-2 col-md-2">
-      <div>Friend List</div>
-      <br><br><br>
-			
-			<div id="friend-list">
-				{% for friend in friends %}
-				<div>
-          <a href="{% url 'bill_list' pk=friend.pk %}">{{ friend.get_full_name }}</a>
-        </div>
-				{% endfor %}
-			</div>
+			<div class="wrapper">
 
+				<div id="sidebar-wrapper">
+					<h4 style = "font-weight: bold"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>&nbsp;&nbsp;Friend List</h4>
+					<ul class="sidebar-nav">
+						{% for friend in friends %}
+						<li><a href="{% url 'bill_list' pk=friend.pk %}">{{ friend.get_full_name }}</a></li>
+
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
 		</div>
+
 	</div><!-- end of row -->
 </div> <!-- end of container -->
 
-
+{% include 'footer.html' %}
 
 {% endblock %}
