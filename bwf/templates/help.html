@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet" ><!-- Do not put it in header block. Unknow reason -->
+{% include 'navbar.html' %}
+
+<div class="container">
+		<h1>Why Bills with friends?</h1>
+		<h3>Bills with friends is a simple tool to track debts and manage shared bills amongst friends. Signing up is free!</h3>
+		<br>
+		<h1>Idea behind Bills with friends</h1>
+		<h3>Consider there are 4 friend stays together. They go to movies, restaurants buys groceries and even takes trips together. They want to track how much each spends, so that the other guys owes him back. There are few apps in market. But they are not very good. I want to make a improved version with many visualizations. With this app, we can store small description of the bill (which includes event name, location, date and time), split the bill among 4 and gives a graphical representation of records in the form of chart.</h3>
+		<br>
+		<h1>Basic Terms Used</h1>
+		<h3>Dashboard - a graphical summary of various pieces of important information, typically used to give an overview of debts with friends</h3>
+		<br>
+		<h3>Recent Activity - gives the last few activities involving bills with your friends</h3>
+		<br>
+		<h3>All Expenses - gives the summary of all expenses you made for your friends</h3>
+		<br>
+		<h3>Add Bill - This option enables you to add the bills that you made for your friends, enabling you to select you all involved in that bill</h3>
+		<br>
+		<h3>Settle Up - This option allows you to update the information that you have cleared your debt with your friends</h3>
+		<br>
+		<h3>Add Friend - Using this option you can add friends with whom you spend your money.
+		<hr>
+	</div>
+	{% include 'footer.html' %}
+
+</body>
+{% endblock %}
