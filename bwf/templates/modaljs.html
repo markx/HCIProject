@@ -2,20 +2,55 @@
   	  var friendlist = new Array();
   	  var i = 0;
   	  var level = 0;
+  	  var chooseType = "mannual";
+  	  var creditor = "{{user.email}}";
   	  var strInput = "hemizedPrice" + i;
   	  var strInitSample = "sample" + i;
   	  var testNumber = 3;
+  	  var friendChosen = [{name:"{{user.get_full_name}}", email:"{{user.email}}"}];
   	  {% for friend in friends %}
   	  	var stringName = "{{friend.get_full_name}}" + i;
   	  	$("#addRow tr:eq(0) td:eq("+testNumber+") input").attr({id:stringName});
   	  	testNumber += 1;
 	  {% endfor %}
 
+
+	  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+
   	  $("#fadeBill").click(function(){
   	  		if (friendlist.length == 0) {
 		  	  	{% for friend in friends %}
 		  	  		var friendname = "{{ friend.get_full_name }}";
+		  	  		var friendObject = {name:"{{ friend.get_full_name }}", email:"{{ friend.email }}"};
 		  	  		friendlist.push(friendname);
+		  	  		friendChosen.push(friendObject);
 		  	  	{% endfor %}
 		  	};
 	  	  	document.getElementById('datePicker').valueAsDate = new Date();
@@ -25,20 +60,23 @@
 	  	var totalAmount = document.getElementById('equalAmount').value;
 	  	var friendsNumber = {{friends|length}};
   	  	$(".perAmountEqual").each(function(){
-  	  		this.value = totalAmount/2 + '$';
+  	  		this.value = totalAmount/2;
   	  	});
 	  });
 
 	  $("#hemized").click(function(){
 	  	$("#size").attr("class", "modal-dialog modal-lg"); 
+	  	chooseType = "hemized";
 	  });
 
 	  $("#equal").click(function(){
 	  	$("#size").attr("class", "modal-dialog modal-sm"); 
+	  	chooseType="equal";
 	  });
 
 	  $("#mannual").click(function(){
 	  	$("#size").attr("class", "modal-dialog modal-sm"); 
+	  	chooseType = "mannual";
 	  });
 
 	  $.custom = {
@@ -187,6 +225,46 @@
 	  	var rowNumber = 0;
 	  	$.updateData(rowNumber);
 	  	$.updateTotal();
+	  });
+
+	  $("#addBill").click(function(){
+	  	var postData = [];
+	  	if (chooseType == "mannual") {
+	  		$.each(friendChosen, function(n, friend){
+	  			if (friend.email != creditor) {
+	  				var tabId = "perAmountMannual_" + friend.name;
+	  				var amount = document.getElementById(tabId).value;
+	  				var billTime = $("#datePicker").val();
+	  				var bill = {"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
+	  				postData.push(bill);
+	  			};
+	  		});
+	  	}else if (chooseType == "equal") {
+	  		$.each(friendChosen, function(n, friend){
+	  			if (friend.email != creditor) {
+	  				var tabId = "perAmountEqual_" + friend.name;
+	  				var amount = document.getElementById(tabId).value;
+	  				var billTime = $("#datePicker").val();
+	  				var bill = {"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
+	  				postData.push(bill);
+	  			};
+	  		});
+	  	}else{
+	  		$.each(friendChosen, function(n, friend){
+	  			if (friend.email != creditor) {
+	  				var tabId = friend.name + "_Amount";
+	  				var amount = document.getElementById(tabId).value;
+	  				var billTime = $("#datePicker").val();
+	  				var bill = {"creditor":creditor, "debtor":friend.email, "amount":amount, "bill_time":billTime};
+	  				postData.push(bill);
+	  			};
+	  		});
+	  	};
+
+	  	$.post("/bill/new",{bill: postData},function(){
+	  		location.reload();
+	  	});
+
 	  });
 
 	  $("#cancel").click(function(){

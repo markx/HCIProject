@@ -40,7 +40,7 @@
           </li>
         </ul>
         <!-- 选择计算方式 -->
-        <ul class="nav nav-tabs" role="tablist">
+        <ul class="nav nav-tabs" role="tablist" id="chooseType">
           <li role="presentation" class="active"><a href="#Mannual" role="tab" data-toggle="tab" id="mannual">Mannual</a></li>
           <li role="presentation"><a href="#Equal" role="tab" data-toggle="tab" id="equal">Equal</a></li>
           <li role="presentation"><a href="#Hemized" role="tab" data-toggle="tab" id="hemized">Hemized</a></li>
@@ -72,7 +72,7 @@
             </div>
             <div>
               {% for friend in friends %}
-                <p>{{friend.get_full_name}} <span><input type="text" class="perAmountEqual"></span></p>
+                <p>{{friend.get_full_name}} <span><input type="text" class="perAmountEqual" id="perAmountEqual_{{friend.get_full_name}}"></span></p>
               {% endfor %}
             </div>
           </div>

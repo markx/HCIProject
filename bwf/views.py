@@ -1,5 +1,7 @@
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
+
 
 from django.views.generic import View,TemplateView,ListView
 from django.views.generic.edit import CreateView
@@ -76,8 +78,8 @@ class SignupView(CreateView):
 class AddBillView(View):
     def post(self,request,*args, **kwargs):
         post = request.POST
-        new_friends = json.loads(request.POST.get('new_friend'))
-        bills = json.loads(request.POST.get('bill'))
+        new_friends = json.loads(request.POST.get('new_friend','[]'))
+        bills = json.loads(request.POST.get('bill','[]'))
 
         #add new friends if exist
         for data in new_friends:
@@ -104,6 +106,9 @@ class AddBillView(View):
                 bill.save()
             except Exception :
                 logging.exception()
+        response_data = {"done": True }
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 
 add_bill = login_required(AddBillView.as_view())
 
