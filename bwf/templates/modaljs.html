@@ -121,7 +121,7 @@
 	  	var totalAmount = document.getElementById('equalAmount').value;
 	  	var friendsNumber = {{friends|length}};
   	  	$(".perAmountEqual").each(function(){
-  	  		this.value = totalAmount/2;
+  	  		this.value = totalAmount/friendlist.length;
   	  	});
 	  });
 
