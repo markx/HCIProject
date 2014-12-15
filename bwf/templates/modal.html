@@ -25,7 +25,7 @@
               <span class="caret"></span>
             </a>
             <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4" choosetype="peoplepaid">
-              <li role="presentation"><a role="menuitem" tabindex="-1" onclick="document.getElementById('peoplePaid').value='Action'">Action</a></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" id="creditor_chen">Myself</a></li>
             </ul>
           </li>
         </ul>
@@ -44,13 +44,7 @@
                    <th data-field="">Shared Amount</th>
                 </tr>
               </thead>
-              <tbody> 
-                {% for friend in friends %}
-                <tr>
-                  <th>{{friend.get_full_name}} </th>
-                  <th><input type="text" id="perAmountMannual_{{friend.get_full_name}}" class="sharedAmount"></th>
-                </tr>
-                {% endfor %}
+              <tbody id="mannual_table">
               </tbody>
             </table>
           </div>
@@ -60,10 +54,7 @@
               <input type="text" class="form-control" id="equalAmount">
               <span class="input-group-addon">$</span>
             </div>
-            <div>
-              {% for friend in friends %}
-                <p>{{friend.get_full_name}} <span><input type="text" class="perAmountEqual" id="perAmountEqual_{{friend.get_full_name}}"></span></p>
-              {% endfor %}
+            <div id="equal_table">
             </div>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="Hemized" aria-labelledby="dropdown1-tab">
@@ -75,20 +66,14 @@
             <div>
                <table data-url="data3.json" data-height="299" data-show-columns="true" data-id-field="id">
                   <thead>
-                  <tr>
+                  <tr id="price_table">
                       <th data-field="state" data-radio="true"></th>
                       <th data-field="name" data-switchable="false">Item</th>
                       <th data-field="price">Price</th>
-                      {% for friend in friends %}
-                        <th>{{friend.get_full_name}}</th>
-                      {% endfor %}
                   </tr>
                   </thead>
                   <tbody id="addRow">
                     <tr data-index="0" id="sample0"><td class="bs-checkbox"></td><td style="test"><input type="text"></td><td style=""><input type="text" id="hemizedPrice0" class="inputGroup"></td>
-                      {% for friend in friends %}
-                        <td style="" id="checkBoxData"><input data-index="0" name="btSelectItem" type="checkbox" value="0" class="checkBox" row="0"></td>
-                      {% endfor %}
                     </tr>
                   </tbody>
               </table>
@@ -102,11 +87,8 @@
                   </tr>
                   </thead>
                   <tbody>
-                      <tr>
+                      <tr id="hemized_table">
                         <td class="bs-checkbox"></td><td style="test"><input type="text" readonly></td><td style=""><input type="text" id="totalAmount" readonly></td>
-                        {% for friend in friends %}
-                          <td><input type="text" style="width:45;" id="{{friend.get_full_name}}_Amount"></td>
-                        {% endfor %}
                       </tr>
                   </tbody>
               </table>

@@ -3,7 +3,11 @@
 <link rel="stylesheet" type="text/css" href="/static/css/token-input-facebook.css" />
 
 <script>
-  	  var friendlist = new Array();
+  	  var friendlist = [{email: '{{ user.email }}', 
+	                first_name: '{{user.first_name}}',
+	                last_name: '{{ user.last_name }}',
+	                name: '{{user.get_full_name }}',
+	                id: -1}];
   	  var i = 0;
   	  var level = 0;
   	  var chooseType = "mannual";
@@ -11,74 +15,105 @@
   	  var strInput = "hemizedPrice" + i;
   	  var strInitSample = "sample" + i;
   	  var testNumber = 3;
-  	  var friendChosen = [{name:"{{user.get_full_name}}", email:"{{user.email}}"}];
-  	  {% for friend in friends %}
-  	  	var stringName = "{{friend.get_full_name}}" + i;
-  	  	$("#addRow tr:eq(0) td:eq("+testNumber+") input").attr({id:stringName});
-  	  	testNumber += 1;
-      {% endfor %}
-
-
+  	  var chooseFriend = [];
 
 	  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie != '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = jQuery.trim(cookies[i]);
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+		var csrftoken = getCookie('csrftoken');
+		function csrfSafeMethod(method) {
+		    // these HTTP methods do not require CSRF protection
+		    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+		}
+		$.ajaxSetup({
+		    beforeSend: function(xhr, settings) {
+		        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+		            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		        }
+		    }
+		});
 
 
+	  $.each(friendlist, function(n, friend){
+	  	var txt1 = $("<th>"+friend.name+"</th>");
+	  	$("#price_table").append(txt1);
+	  	var txt2 = $("<p>"+friend.name+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friend.name+"}'></span></p>");
+	  	$("#equal_table").append(txt2);
+	  	var txt3 = $("<tr><th>"+friend.name+" </th><th><input type='text' id='perAmountMannual_"+friend.name+"' class='sharedAmount'></th></tr>")
+	  	$("#mannual_table").append(txt3);
+	  	var txt4 = $("<td><input type='text' style='width:45;' id='"+friend.name+"_Amount'  readonly></td>");
+	  	$("#hemized_table").append(txt4);
+	  	var stringName = friend.name + i;
+	  	var txt5 = $("<td style=''><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"'></td>")
+	  	$("#sample0").append(txt5);
+	  });	
+	  	
+		
   	  $("#fadeBill").click(function(){
-  	  		if (friendlist.length == 0) {
-		  	  	{% for friend in friends %}
-		  	  		var friendname = "{{ friend.get_full_name }}";
-              friendlist.push({ 
-                email: '{{ friend.email }}', 
-                first_name: '{{friend.first_name}}',
-                last_name: '{{ friend.last_name }}',
-                name: '{{friend.get_full_name }}',
-                id: {{ friend.pk }}
-              });
-		  	  	{% endfor %}
-		  	};
+		  	  {% for friend in friends %}
+		  	  	  var friendname = "{{ friend.get_full_name }}";
+	              friendlist.push({ 
+	                email: '{{ friend.email }}', 
+	                first_name: '{{friend.first_name}}',
+	                last_name: '{{ friend.last_name }}',
+	                name: '{{friend.get_full_name }}',
+	                id: {{ friend.pk }}
+	              });
+	              chooseFriend.push({ 
+	                email: '{{ friend.email }}', 
+	                first_name: '{{friend.first_name}}',
+	                last_name: '{{ friend.last_name }}',
+	                name: '{{friend.get_full_name }}',
+	                id: {{ friend.pk }}
+	              });
+		  	  {% endfor %}
 	  	  	document.getElementById('datePicker').valueAsDate = new Date();
   	  });
 
   $(function(){
-            $("#peopleInvolved").tokenInput( friendlist ,
+            $("#peopleInvolved").tokenInput( chooseFriend ,
                 {
                   theme: "facebook",  
                   onAdd: function (item) {
-                    var li = $("<li id='li-"+item.id+"' role='presentation'><a role='menuitem' tabindex='-1'>"+ item.name +"</a></li>");
+                    var li = $("<li id='li-"+item.id+"' role='presentation'><a role='menuitem' tabindex='-1' id='creditor_"+item.name+"'>"+ item.name +"</a></li>");
                     $('#menu1').append(li);
-
+                    $.addTab(item.name);
+                    $("#creditor_"+item.name).click(function(){
+  						document.getElementById("peoplePaid").value = $(this).text();
+  						$.each(friendlist,function(n, friend){
+  							if (friend.name == item.name) {
+  								creditor = friend.email;
+  							};
+  						});
+					  });
                   },
                   onDelete: function (item) {
                     $('#li-'+item.id).remove();
+                    $.deleteTab(item.name);
                   } 
                 });
             $(".token-input-dropdown-facebook").css("z-index","99999");
+  });
+
+  $("#creditor_chen").click(function(){
+  	document.getElementById("peoplePaid").value = $(this).text();
+  	$.each(friendlist,function(n, friend){
+		if (friend.name == chen) {
+			creditor = friend.email;
+		};
+	});
   });
 
 
@@ -121,12 +156,12 @@ $.ajaxSetup({
 			  	document.getElementById(strInput).value = "";
 			  	var countNumber = 3;
 			  	var strCheckBox = "checkBox";
-			  	{% for friend in friends %}
-			  		strCheckBox = "{{friend.get_full_name}}" + intI;
+			  	$.each(friendlist, function(n, friend){
+			  		strCheckBox = friend.name + intI;
 			  		$("#addRow tr:eq("+intI+") td:eq("+countNumber+") input").attr({id:strCheckBox});
 			  		$("#addRow tr:eq("+intI+") td:eq("+countNumber+") input").attr("row", intI);
 			  		countNumber += 1;
-			  	{% endfor %}
+			  	});
 
 			  	$("#addRow tr:eq("+intI+") td:eq(2) input").bind("input",function(){
 			  		$.custom.recursive(intI);
@@ -140,8 +175,8 @@ $.ajaxSetup({
 
 	$.extend({
 		recursiveCheckBox:function(rowNumber){
-			{% for friend in friends %}
-				var checkBoxId = "{{friend.get_full_name}}" + rowNumber;
+			$.each(friendlist, function(n, friend){
+				var checkBoxId = friend.name + rowNumber;
 				$("#" + checkBoxId).on("click",function(){
 					var valueString = "hemizedPrice" + rowNumber;
 	  				var itemPrice = document.getElementById(valueString).value;
@@ -155,7 +190,7 @@ $.ajaxSetup({
 	  				$.updateData(rowNumber);
 	  				$.updateTotal();
 				});
-			{% endfor %}
+			});
 		}
 	});
 
@@ -163,24 +198,24 @@ $.ajaxSetup({
 	  	updateData:function(rowN){
 	  		var priceId = "hemizedPrice" + rowN;
 	  		var sharedNumber = 0;
-	  		{% for friend in friends %}
-	  			var friendName = "{{friend.get_full_name}}";
+	  		$.each(friendlist, function(n, friend){
+	  			var friendName = friend.name;
 		  		var checkBoxId = friendName + rowN;
 		  		var checkValue = $("#"+checkBoxId).attr("value");
 		  		if (checkValue != 0) {
 		  			sharedNumber += 1;
 		  		};
-	  		{% endfor %}
+	  		});
 	  		var itemPrice = document.getElementById(priceId).value;
 	  		var perAmount = itemPrice/sharedNumber;
-	  		{% for friend in friends %}
-	  			var friendName = "{{friend.get_full_name}}";
+	  		$.each(friendlist, function(n, friend){
+	  			var friendName = friend.name;
 	  			var checkBoxId = friendName + rowN;
 		  		var checkValue = $("#"+checkBoxId).attr("value");
 		  		if (checkValue != 0) {
 		  			$("#"+checkBoxId).attr("value", perAmount);
 		  		};
-	  		{% endfor %}
+	  		});
 	  	}
 	});
 
@@ -196,8 +231,8 @@ $.ajaxSetup({
 	  		};
 	  		document.getElementById("totalAmount").value = totalAmountNum + "";
 
-	  		{% for friend in friends %}
-	  			var friendName = "{{friend.get_full_name}}";
+	  		$.each(friendlist, function(n, friend){
+	  			var friendName = friend.name;
 	  			var subtotalId = friendName + "_Amount";
 
 	  			document.getElementById(subtotalId).value = "";
@@ -218,7 +253,7 @@ $.ajaxSetup({
 		  				document.getElementById(subtotalId).value = sumNum;
 		  			};
 	  			};
-	  		{% endfor %}
+	  		});
 	  	}
 	});
 
@@ -229,6 +264,38 @@ $.ajaxSetup({
 			var sumNum =  number1 + number2;
 			var sumString = sumNum + "";
 			return sumString;
+		}
+	});
+
+	$.extend({
+		addTab:function(friendname){
+		  	var txt1 = $("<th id='price_table"+friendname+"'>"+friendname+"</th>");
+		  	$("#price_table").append(txt1);
+		  	var txt2 = $("<p id='equal_table"+friendname+"'>"+friendname+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friendname+"}'></span></p>");
+		  	$("#equal_table").append(txt2);
+		  	var txt3 = $("<tr id='mannual_table"+friendname+"'><th>"+friendname+" </th><th><input type='text' id='perAmountMannual_"+friendname+"' class='sharedAmount'></th></tr>")
+		  	$("#mannual_table").append(txt3);
+		  	var txt4 = $("<td id='totalPer_"+friendname+"'><input type='text' style='width:45;' id='"+friendname+"_Amount'  readonly></td>");
+		  	$("#hemized_table").append(txt4);
+		  	var stringName = friendname + i;
+		  	var txt5 = $("<td style='' id='checkBox_"+friendname+"'><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"'></td>")
+		  	$("#sample0").append(txt5);
+		}
+	});
+
+	$.extend({
+		deleteTab:function(friendname){
+		  	var txt1 = $("<th id='price_table"+friendname+"'>"+friendname+"</th>");
+		  	$("#price_table"+friendname).remove();
+		  	var txt2 = $("<p id='equal_table"+friendname+"'>"+friendname+"<span><input type='text' class='perAmountEqual' id='perAmountEqual_"+friendname+"}'></span></p>");
+		  	$("#equal_table"+friendname).remove();
+		  	var txt3 = $("<tr id='mannual_table"+friendname+"'><th>"+friendname+" </th><th><input type='text' id='perAmountMannual_"+friendname+"' class='sharedAmount'></th></tr>")
+		  	$("#mannual_table"+friendname).remove();
+		  	var txt4 = $("<td id='totalPer_"+friendname+"'><input type='text' style='width:45;' id='"+friendname+"_Amount'  readonly></td>");
+		  	$("#totalPer_"+friendname).remove();
+		  	var stringName = friendname + i;
+		  	var txt5 = $("<td style='' id='checkBox_"+friendname+"'><input data-index='0' name='btSelectItem' type='checkbox' value='0' class='checkBox' row='0' id='"+stringName+"'></td>")
+		  	$("#checkBox_"+friendname).remove();
 		}
 	});
 
@@ -256,7 +323,7 @@ $.ajaxSetup({
 	  $("#addBill").click(function(){
 	  	var postData = [];
 	  	if (chooseType == "mannual") {
-	  		$.each(friendChosen, function(n, friend){
+	  		$.each(friendlist, function(n, friend){
 	  			if (friend.email != creditor) {
 	  				var tabId = "perAmountMannual_" + friend.name;
 	  				var amount = document.getElementById(tabId).value;
@@ -266,7 +333,7 @@ $.ajaxSetup({
 	  			};
 	  		});
 	  	}else if (chooseType == "equal") {
-	  		$.each(friendChosen, function(n, friend){
+	  		$.each(friendlist, function(n, friend){
 	  			if (friend.email != creditor) {
 	  				var tabId = "perAmountEqual_" + friend.name;
 	  				var amount = document.getElementById(tabId).value;
@@ -276,7 +343,7 @@ $.ajaxSetup({
 	  			};
 	  		});
 	  	}else{
-	  		$.each(friendChosen, function(n, friend){
+	  		$.each(friendlist, function(n, friend){
 	  			if (friend.email != creditor) {
 	  				var tabId = friend.name + "_Amount";
 	  				var amount = document.getElementById(tabId).value;
