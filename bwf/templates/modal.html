@@ -12,27 +12,17 @@
       <!-- modal主体内容 -->
       <div class="modal-body">
         <!-- 下拉菜单1：选择人员名单 -->
-        <ul class="nav nav-pills" role="tablist">
-          <li role="presentation" style="position:relative; display:block; padding:5px;">Select who involved</li>
-          <li role="presentation" class="dropdown">
-            <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false" style="background:#E9E9E9; padding:5px 10px;">
-            <input type="text" class="form-control" placeholder="Username" style="width:100px; display:block-inline;" name="peopleInvolved" id="peopleInvolved">
-            <span class="caret"></span>
-            </a>
-            <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4" id="insertName">
-            {% for friend in friends %}
-                <li role="presentation"><a role="menuitem" class="friendsName" tabindex="-1" onclick="document.getElementById('peopleInvolved').value = document.getElementById('peopleInvolved').value + '{{ friend.get_full_name }}' + ' '">{{ friend.get_full_name }}</a></li>
-            {% endfor %}
-            </ul>
-          </li>
-        </ul>
+        <div>
+          <input id="peopleInvolved" type="text" >
+        </div>
+
         <!-- 下拉菜单2：选择付款人 -->
         <ul class="nav nav-pills" role="tablist" style="padding:5px;">
           <li role="presentation" style="position:relative; display:block; padding:5px;">Select who paid</li>
           <li role="presentation" class="dropdown">
             <a id="drop4" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false" style="background:#E9E9E9; padding:5px 10px;">
-            <input type="text" class="form-control" placeholder="Username" style="width:100px; display:block-inline;" name="peoplePaid" id="peoplePaid">
-            <span class="caret"></span>
+              <input type="text" class="form-control" placeholder="Username" style="width:100px; display:block-inline;" name="peoplePaid" id="peoplePaid">
+              <span class="caret"></span>
             </a>
             <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4" choosetype="peoplepaid">
               <li role="presentation"><a role="menuitem" tabindex="-1" onclick="document.getElementById('peoplePaid').value='Action'">Action</a></li>

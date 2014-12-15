@@ -1,3 +1,7 @@
+<script src="/static/js/jquery.tokeninput.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/token-input.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/token-input-facebook.css" />
+
 <script>
   	  var friendlist = new Array();
   	  var i = 0;
@@ -12,7 +16,8 @@
   	  	var stringName = "{{friend.get_full_name}}" + i;
   	  	$("#addRow tr:eq(0) td:eq("+testNumber+") input").attr({id:stringName});
   	  	testNumber += 1;
-	  {% endfor %}
+      {% endfor %}
+
 
 
 	  function getCookie(name) {
@@ -48,13 +53,34 @@ $.ajaxSetup({
   	  		if (friendlist.length == 0) {
 		  	  	{% for friend in friends %}
 		  	  		var friendname = "{{ friend.get_full_name }}";
-		  	  		var friendObject = {name:"{{ friend.get_full_name }}", email:"{{ friend.email }}"};
-		  	  		friendlist.push(friendname);
-		  	  		friendChosen.push(friendObject);
+              friendlist.push({ 
+                email: '{{ friend.email }}', 
+                first_name: '{{friend.first_name}}',
+                last_name: '{{ friend.last_name }}',
+                name: '{{friend.get_full_name }}',
+                id: {{ friend.pk }}
+              });
 		  	  	{% endfor %}
 		  	};
 	  	  	document.getElementById('datePicker').valueAsDate = new Date();
   	  });
+
+  $(function(){
+            $("#peopleInvolved").tokenInput( friendlist ,
+                {
+                  theme: "facebook",  
+                  onAdd: function (item) {
+                    var li = $("<li id='li-"+item.id+"' role='presentation'><a role='menuitem' tabindex='-1'>"+ item.name +"</a></li>");
+                    $('#menu1').append(li);
+
+                  },
+                  onDelete: function (item) {
+                    $('#li-'+item.id).remove();
+                  } 
+                });
+            $(".token-input-dropdown-facebook").css("z-index","99999");
+  });
+
 
 	  $("#equalAmount").on("input",function(){
 	  	var totalAmount = document.getElementById('equalAmount').value;

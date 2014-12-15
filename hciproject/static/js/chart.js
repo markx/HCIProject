@@ -1,8 +1,11 @@
 var chart = {};
 
 chart.draw = function (id, data) {
-    console.log(id);
-    console.log(data);
+
+    if(data == ""){
+        data = {name:"No Data", y:0, pk:""};
+    }
+
     $('#'+id ).highcharts({
         chart: {
             plotBackgroundColor: null,
