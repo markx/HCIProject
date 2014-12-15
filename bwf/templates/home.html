@@ -39,13 +39,14 @@
 
 				<div id="sidebar-wrapper">
 					<h4 style = "font-weight: bold"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>&nbsp;&nbsp;Friend List</h4>
-					{% include 'add_friend.html' %}
+					
 					<ul class="sidebar-nav">
 						{% for friend in friends %}
 						<li><a href="{% url 'bill_list' pk=friend.pk %}">{{ friend.get_full_name }}</a></li>
 
 						{% endfor %}
 					</ul>
+					{% include 'add_friend.html' %}
 				</div>
 			</div>
 		</div>

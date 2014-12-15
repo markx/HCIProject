@@ -2,11 +2,12 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-<!DOCTYPE html>
+
 
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
+<!DOCTYPE html>
 <link href="{% static 'css/index.css' %}" rel="stylesheet" >
 <body>
 	<div id="bwf-header">
@@ -32,6 +33,15 @@
 		<h1>Why Bills with friends?</h1>
 		<h3>Bills with friends is a simple tool to track debts and manage shared bills amongst friends. Signing up is free!</h3>
 		<br>
+		<div class="row">
+			<div class="col-lg-5 col-md-5">
+				<img src="{% static 'css/2.png'%}" class="img-thumbnail">
+			</div>
+			<div class="col-lg-5 col-md-5">
+				<h3 style="font-family: Play;">Know your bills by chart</h3>
+			</div>
+		</div>
+
 		<h1>The story behind this project</h1>
 		<h3>We group of 4 Graduate Students. It was Human Computer Interaction course. The professor asked us to implement an application with our own idea. We came up with an idea of building a mobile/ Web application to organize the bills with our friends. <br><br>Consider there are 4 friend stays together. They go to movies, restaurants buys groceries and even takes trips together. They want to track how much each spends, so that the other guys owes him back. There are few apps in market. But they are not very good. I want to make a improved version with many visualizations. With this app, we can store small description of the bill (which includes event name, location, date and time), split the bill among 4 and gives a graphical representation of records in the form of chart.</h3>
 		<br>
